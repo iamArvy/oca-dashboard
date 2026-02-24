@@ -4,6 +4,7 @@ import StarterKit from "@tiptap/starter-kit";
 import Link from "@tiptap/extension-link";
 import Image from "@tiptap/extension-image";
 import Youtube from "@tiptap/extension-youtube";
+import Placeholder from "@tiptap/extension-placeholder";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import {
@@ -22,12 +23,12 @@ import {
 } from "lucide-vue-next";
 
 interface Props {
-  content: string;
+  modelValue?: string;
   placeholder?: string;
 }
 
 const props = defineProps<Props>();
-const emit = defineEmits<{ (e: "update:content", content: string): void }>();
+const emit = defineEmits<{ (e: "update:modelValue", value: string): void }>();
 
 // Editor instance
 const editor = useEditor({
@@ -47,10 +48,13 @@ const editor = useEditor({
         class: "rounded-lg overflow-hidden aspect-video w-full",
       },
     }),
+    Placeholder.configure({
+      placeholder: props.placeholder || "Write something...",
+    }),
   ],
-  content: props.content,
+  content: props.modelValue,
   onUpdate: ({ editor }) => {
-    emit("update:content", editor.getHTML());
+    emit("update:modelValue", editor.getHTML());
   },
   editorProps: {
     attributes: {
@@ -60,6 +64,18 @@ const editor = useEditor({
   },
 });
 
+watch(
+  () => props.modelValue,
+  (value) => {
+    if (editor.value && value !== editor.value.getHTML()) {
+      editor.value.commands.setContent(value || "", { emitUpdate: false });
+    }
+  },
+);
+
+onBeforeUnmount(() => {
+  editor.value?.destroy();
+});
 // Toolbar actions
 const setLink = () => {
   if (!editor.value) return;
@@ -93,7 +109,7 @@ const addYoutube = () => {
 };
 
 // Toolbar button helper
-const isActive = (name: string, options?: any) =>
+const isActive = (name: string, options?: object) =>
   editor.value?.isActive(name, options) || false;
 </script>
 

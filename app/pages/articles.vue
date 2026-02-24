@@ -351,15 +351,106 @@ function getStatusColor(status?: string) {
   </div>
 </template> -->
 <script setup lang="ts">
-// definePageMeta({ middleware: ["auth"] });
+import { Edit } from "lucide-vue-next";
+import { posts as initialPosts } from "@/lib/mockData";
+
+import type { Post } from "~/interfaces";
+const {
+  mode,
+  deleteDialogOpen,
+  postToDelete,
+  modalOpen,
+  selectedPost,
+  handleCreate,
+  handleView,
+  handleEdit,
+  handleDelete,
+  toggleTrending,
+  confirmDelete,
+} = useArticleActions();
 
 const header = {
   title: "Articles",
   subtitle: "Manage all your published and draft articles.",
+  action: {
+    label: "Create Post",
+    value: handleCreate,
+  },
 };
+const posts = ref<Post[]>(initialPosts);
 </script>
 <template>
   <div class="space-y-6">
     <PageHeader v-bind="header" />
+    <ArticleFilter />
+    <ArticleList
+      :posts="posts"
+      @view="handleView"
+      @edit="handleEdit"
+      @delete="handleDelete"
+      @toggle-trending="toggleTrending"
+    />
+    <Pagination>
+      <PaginationContent>
+        <PaginationItem>
+          <PaginationPrevious href="#" />
+        </PaginationItem>
+        <PaginationItem>
+          <PaginationLink href="#"> 1 </PaginationLink>
+        </PaginationItem>
+        <PaginationItem>
+          <PaginationLink href="#" is-active> 2 </PaginationLink>
+        </PaginationItem>
+        <PaginationItem>
+          <PaginationLink href="#"> 3 </PaginationLink>
+        </PaginationItem>
+        <PaginationItem>
+          <PaginationEllipsis />
+        </PaginationItem>
+        <PaginationItem>
+          <PaginationNext href="#" />
+        </PaginationItem>
+      </PaginationContent>
+    </Pagination>
+
+    <ModalComponent
+      v-model:open="modalOpen"
+      :title="
+        mode === 'create'
+          ? 'Create New Post'
+          : mode === 'edit'
+            ? 'Edit Post'
+            : 'View Post'
+      "
+    >
+      <template #button>
+        <Button
+          v-if="mode === 'view' && selectedPost"
+          variant="outline"
+          size="sm"
+          @click="mode = 'edit'"
+          class="gap-2"
+        >
+          <Edit class="w-4 h-4" /> Edit
+        </Button>
+      </template>
+      <ArticleView
+        v-if="mode === 'view' && selectedPost"
+        v-bind="selectedPost"
+      />
+      <ArticleForm
+        v-else
+        :post="selectedPost"
+        :mode="mode"
+        @cancel="$emit('update:open', false)"
+      />
+    </ModalComponent>
+    <DeleteDialog
+      v-if="postToDelete"
+      label="Post"
+      :value="postToDelete.title ?? ''"
+      :action="confirmDelete"
+      :model-value="deleteDialogOpen"
+    />
   </div>
 </template>
