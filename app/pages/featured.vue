@@ -298,8 +298,8 @@ export default {
 </script> -->
 <script setup lang="ts">
 const header = {
-  title: "Featured Articles",
-  subtitle: "Manage Featured Articles on the website",
+  title: "Featured Posts",
+  subtitle: "Manage Featured Posts on the website",
 };
 </script>
 <template>

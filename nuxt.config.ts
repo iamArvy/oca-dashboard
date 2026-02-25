@@ -43,4 +43,8 @@ export default defineNuxtConfig({
     url: "https://dashboard.oneclickafrica.com",
     image: "https://dashboard.oneclickafrica.com/og-image.jpg",
   },
+  runtimeConfig: {
+    apiBase: process.env.API_BASE,
+    apiKey: process.env.API_KEY,
+  },
 });

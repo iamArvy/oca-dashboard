@@ -1,11 +1,11 @@
 import { ref } from "vue";
 import type { Post } from "~/interfaces";
 
-type ArticleMode = "view" | "edit" | "create";
+type PostMode = "view" | "edit" | "create";
 
-export function useArticleActions() {
+export function usePostActions() {
   const { success } = useToast();
-  const mode = ref<ArticleMode>('create');
+  const mode = ref<PostMode>("create");
   const modalOpen = ref(false);
   const selectedPost = ref<Post | null>(null);
 

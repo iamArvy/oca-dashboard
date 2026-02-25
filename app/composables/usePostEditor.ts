@@ -2,10 +2,11 @@ import type { Post } from "~/interfaces";
 import { toTypedSchema } from "@vee-validate/zod";
 import { useForm } from "vee-validate";
 import z from "zod";
+import { PostStatus } from "~/enums";
 
 type Mode = "edit" | "create" | "view";
 
-export function useArticleEditor(post?: Post | null, mode: Mode = "create") {
+export function usePostEditor(post?: Post | null, mode: Mode = "create") {
   const { success } = useToast();
 
   const formSchema = toTypedSchema(
@@ -13,7 +14,7 @@ export function useArticleEditor(post?: Post | null, mode: Mode = "create") {
       title: z.string().min(2, "Title must be at least 2 characters").max(50),
       excerpt: z.string().optional(),
       content: z.string().min(2, "Content is required"),
-      category: z.string().min(2, "Category is required"),
+      topicId: z.string().min(2, "Topic is required"),
       image: z.string().optional(),
       status: z.string().default("draft"),
       tags: z.array(z.string().min(2)).optional().default([]),
@@ -29,32 +30,32 @@ export function useArticleEditor(post?: Post | null, mode: Mode = "create") {
             title: post.title || "",
             excerpt: post.excerpt || "",
             content: post.content || "",
-            category: post.category || "",
+            topicId: post.topic.id || "",
             image: post.image || "",
-            status: post.status || "draft",
+            status: post.status || PostStatus.PUBLISHED,
             tags: post.tags || [],
           }
         : {
             title: "",
             excerpt: "",
             content: "",
-            category: "",
+            topicId: "",
             image: "",
-            status: "draft",
+            status: PostStatus.PUBLISHED,
             tags: [],
           },
   });
 
   function create(values: object) {
-    console.log("Creating article:", values);
+    console.log("Creating post:", values);
     // 🔧 Add API or store logic here
-    success("Article Created Successfully");
+    success("Post Created Successfully");
   }
 
   function update(values: object) {
-    console.log("Updating article:", values);
+    console.log("Updating post:", values);
     // 🔧 Add API or store logic here
-    success("Article Updated Successfully");
+    success("Post Updated Successfully");
   }
 
   const onSubmit = handleSubmit((values) => {

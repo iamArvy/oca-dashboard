@@ -6,7 +6,7 @@ type Mode = "edit" | "create" | "view";
 const props = defineProps<{ post?: Post | null; mode: Mode }>();
 // defineEmits<{ (e: "save", data: Partial<Post>): void }>();
 
-const { onSubmit } = useArticleEditor(props.post, props.mode);
+const { onSubmit } = usePostEditor(props.post, props.mode);
 
 // Optional: keep vee-validate and local value in sync
 // watch(

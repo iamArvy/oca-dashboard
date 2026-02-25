@@ -3,6 +3,7 @@ import { BarChart3, Calendar } from "lucide-vue-next";
 import User from "../app/user.vue";
 
 import type { Post } from "~/interfaces";
+import { PostStatus } from "~/enums";
 
 defineProps<Post>();
 </script>
@@ -14,14 +15,18 @@ defineProps<Post>();
         <User class="w-4 h-4" />{{ author }}
       </div>
       <div class="flex items-center gap-2">
-        <Calendar class="w-4 h-4" />{{ new Date(date).toLocaleDateString() }}
+        <Calendar class="w-4 h-4" />{{
+          new Date(createdAt).toLocaleDateString()
+        }}
       </div>
       <div class="flex items-center gap-2">
         <BarChart3 class="w-4 h-4" />{{ views.toLocaleString() }}
         views
       </div>
-      <Badge :variant="status === 'published' ? 'default' : 'secondary'">
-        {{ status || "published" }}
+      <Badge
+        :variant="status === PostStatus.PUBLISHED ? 'default' : 'secondary'"
+      >
+        {{ status }}
       </Badge>
     </div>
     <div v-if="image" class="rounded-xl overflow-hidden">

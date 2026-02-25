@@ -18,7 +18,7 @@ const filters = ref<PostFilter>({
 });
 
 const applyFilters = useDebounceFn(() => {
-  push({ name: "articles", query: filters.value });
+  push({ name: "posts", query: filters.value });
 }, 300);
 
 watch(filters, applyFilters, { deep: true });

@@ -57,8 +57,8 @@ const menuItems = [
         icon: RefreshCcw,
       },
       {
-        title: APP_ROUTES.articles.name,
-        url: APP_ROUTES.articles.path,
+        title: APP_ROUTES.posts.name,
+        url: APP_ROUTES.posts.path,
         icon: FileText,
       },
       {

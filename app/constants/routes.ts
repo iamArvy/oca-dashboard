@@ -11,9 +11,9 @@ export const APP_ROUTES = {
     path: "/topics",
     name: "Topics",
   },
-  articles: {
-    path: "/articles",
-    name: "Articles",
+  posts: {
+    path: "/posts",
+    name: "Posts",
   },
   profile: {
     path: "/profile",

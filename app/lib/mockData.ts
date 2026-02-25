@@ -102,7 +102,7 @@ export const notifications: Notification[] = [
     message: "Kofi Mensah submitted a new article for review",
     read: false,
     date: "2024-01-15T10:30:00",
-    link: "/articles",
+    link: "/posts",
   },
   {
     id: "2",
