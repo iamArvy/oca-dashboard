@@ -2,39 +2,38 @@
 interface Props {
   label: string;
   value: string;
-  action: () => void | Promise<void>;
+  // action: () => void | Promise<void>;
   modelValue: boolean;
 }
 
-const props = defineProps<Props>();
-const emit = defineEmits<{ (e: "update:modelValue", value: boolean): void }>();
-
-// internal close handler
-async function handleAction() {
-  await props.action();
-  emit("update:modelValue", false);
+// ✅ Define emits interface separately
+interface Emit {
+  (e: "update:model-value", value: boolean): void;
+  (e: "confirm"): void;
 }
+
+defineProps<Props>();
+defineEmits<Emit>();
 </script>
 
 <template>
-  <AlertDialog
-    :open="props.modelValue"
-    @update:open="emit('update:modelValue', $event)"
-  >
+  <AlertDialog :open="modelValue">
     <AlertDialogContent class="bg-card">
       <AlertDialogHeader>
-        <AlertDialogTitle>Delete {{ props.label }}</AlertDialogTitle>
+        <AlertDialogTitle>Delete {{ label }}</AlertDialogTitle>
         <AlertDialogDescription>
-          Are you sure you want to delete "<strong>{{ props.value }}</strong
+          Are you sure you want to delete "<strong>{{ value }}</strong
           >"? This action cannot be undone.
         </AlertDialogDescription>
       </AlertDialogHeader>
 
       <AlertDialogFooter>
-        <AlertDialogCancel>Cancel</AlertDialogCancel>
+        <AlertDialogCancel @click="$emit('update:model-value', false)"
+          >Cancel</AlertDialogCancel
+        >
         <AlertDialogAction
           class="bg-destructive hover:bg-destructive/90"
-          @click="handleAction"
+          @click="$emit('confirm')"
         >
           Delete
         </AlertDialogAction>

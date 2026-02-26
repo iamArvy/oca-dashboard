@@ -16,6 +16,7 @@ const {
   handleDelete,
   toggleTrending,
   confirmDelete,
+  handleClose,
 } = usePostActions();
 
 const header = {
@@ -27,7 +28,7 @@ const header = {
   },
 };
 // const posts = ref<Post[]>(initialPosts);
-const { data: posts } = useFetch<ApiListResponse<Posts>>("/api/posts");
+const { data: posts } = useAPI<ApiListResponse<Posts>>("/posts");
 // if (!posts.value) {
 //   throw createError("Data not found");
 // }
@@ -44,28 +45,6 @@ const { data: posts } = useFetch<ApiListResponse<Posts>>("/api/posts");
       @delete="handleDelete"
       @toggle-trending="toggleTrending"
     />
-    <!-- <Pagination>
-      <PaginationContent>
-        <PaginationItem>
-          <PaginationPrevious href="#" />
-        </PaginationItem>
-        <PaginationItem>
-          <PaginationLink href="#"> 1 </PaginationLink>
-        </PaginationItem>
-        <PaginationItem>
-          <PaginationLink href="#" is-active> 2 </PaginationLink>
-        </PaginationItem>
-        <PaginationItem>
-          <PaginationLink href="#"> 3 </PaginationLink>
-        </PaginationItem>
-        <PaginationItem>
-          <PaginationEllipsis />
-        </PaginationItem>
-        <PaginationItem>
-          <PaginationNext href="#" />
-        </PaginationItem>
-      </PaginationContent>
-    </Pagination> -->
 
     <ModalComponent
       v-model:open="modalOpen"
@@ -82,8 +61,8 @@ const { data: posts } = useFetch<ApiListResponse<Posts>>("/api/posts");
           v-if="mode === 'view' && selectedPost"
           variant="outline"
           size="sm"
-          @click="mode = 'edit'"
           class="gap-2"
+          @click="mode = 'edit'"
         >
           <Edit class="w-4 h-4" /> Edit
         </Button>
@@ -93,15 +72,15 @@ const { data: posts } = useFetch<ApiListResponse<Posts>>("/api/posts");
         v-else
         :post="selectedPost"
         :mode="mode"
-        @cancel="$emit('update:open', false)"
+        @cancel="handleClose"
       />
     </ModalComponent>
     <DeleteDialog
       v-if="postToDelete"
+      v-model="deleteDialogOpen"
       label="Post"
       :value="postToDelete.title ?? ''"
-      :action="confirmDelete"
-      :model-value="deleteDialogOpen"
+      @confirm="confirmDelete"
     />
   </div>
 </template>

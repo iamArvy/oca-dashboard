@@ -6,3 +6,5 @@ export interface Topic extends BaseItem {
   parent?: Topic | null;
   children?: Topic[] | [];
 }
+
+export type Topics = Topic[];

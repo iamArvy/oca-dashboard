@@ -4,20 +4,12 @@ import type { Post } from "~/interfaces";
 
 type Mode = "edit" | "create" | "view";
 const props = defineProps<{ post?: Post | null; mode: Mode }>();
-// defineEmits<{ (e: "save", data: Partial<Post>): void }>();
+defineEmits<{
+  (e: "save", data: Partial<Post>): void;
+  (e: "cancel"): void;
+}>();
 
 const { onSubmit } = usePostEditor(props.post, props.mode);
-
-// Optional: keep vee-validate and local value in sync
-// watch(
-//   () => value,
-//   (newVal) => {
-//     if (Array.isArray(newVal)) {
-//       localTags.value = newVal;
-//     }
-//   },
-//   { immediate: true },
-// );
 </script>
 
 <template>

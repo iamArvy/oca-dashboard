@@ -1,64 +1,45 @@
 <script setup lang="ts">
-import { categories } from "@/lib/mockData";
-import type { Post } from "~/interfaces";
+import type { Topic } from "~/interfaces";
 
-type Mode = "edit" | "create" | "view";
-const props = defineProps<{ post?: Post | null; mode: Mode }>();
-// defineEmits<{ (e: "save", data: Partial<Post>): void }>();
+type Mode = "edit" | "create";
+type Type = "topic" | "subtopic";
+const props = defineProps<{
+  topic?: Topic | null;
+  mode: Mode;
+  type: Type;
+}>();
+defineEmits<{
+  (e: "save", data: Partial<Topic>): void;
+  (e: "cancel"): void;
+}>();
 
-const { onSubmit } = usePostEditor(props.post, props.mode);
-
-// Optional: keep vee-validate and local value in sync
-// watch(
-//   () => value,
-//   (newVal) => {
-//     if (Array.isArray(newVal)) {
-//       localTags.value = newVal;
-//     }
-//   },
-//   { immediate: true },
-// );
+const { onSubmit } = useTopicEditor(props.topic, props.mode);
 </script>
 
 <template>
   <form class="space-y-6" @submit.prevent="onSubmit">
-    <!-- Image -->
-    <FormField v-slot="{ componentField }" name="image">
+    <!-- Name -->
+    <FormField v-slot="{ componentField }" name="name">
       <FormItem>
-        <FormLabel>Featured Image</FormLabel>
+        <FormLabel>Name</FormLabel>
         <FormControl>
-          <ImageUpload v-bind="componentField" />
-          <Input
-            v-bind="componentField"
-            class="mt-2"
-            placeholder="Or paste image URL..."
-          />
+          <Input v-bind="componentField" placeholder="Enter name of Topic" />
         </FormControl>
-        <!-- <FormDescription> This is your public display name. </FormDescription> -->
         <FormMessage />
       </FormItem>
     </FormField>
 
-    <!-- Title -->
-    <FormField v-slot="{ componentField }" name="title">
+    <!-- <FormField
+      v-if="topic && type === 'subtopic'"
+      v-slot="{ componentField }"
+      name="parentId"
+    >
       <FormItem>
-        <FormLabel>Excerpt</FormLabel>
-        <FormControl>
-          <Input v-bind="componentField" placeholder="Enter post title" />
-        </FormControl>
-        <!-- <FormDescription> This is your public display name. </FormDescription> -->
-        <FormMessage />
-      </FormItem>
-    </FormField>
-
-    <!-- Category -->
-    <FormField v-slot="{ componentField }" name="category">
-      <FormItem>
-        <FormLabel>Category</FormLabel>
+        <FormLabel>Parent</FormLabel>
         <FormControl>
           <Select v-bind="componentField">
             <SelectTrigger
-              ><SelectValue placeholder="Select category"
+              ><SelectValue placeholder="Select Topic"
             /></SelectTrigger>
             <SelectContent class="bg-card">
               <SelectItem
@@ -70,56 +51,9 @@ const { onSubmit } = usePostEditor(props.post, props.mode);
             </SelectContent>
           </Select>
         </FormControl>
-        <!-- <FormDescription> This is your public display name. </FormDescription> -->
         <FormMessage />
       </FormItem>
-    </FormField>
-
-    <!-- Tags -->
-    <FormField v-slot="{ handleChange, value }" name="tags">
-      <FormItem>
-        <FormLabel>Tags</FormLabel>
-        <FormControl>
-          <TagsInput :model-value="value" @update:model-value="handleChange">
-            <TagsInputItem v-for="item in value" :key="item" :value="item">
-              <TagsInputItemText />
-              <TagsInputItemDelete />
-            </TagsInputItem>
-
-            <TagsInputInput placeholder="Fruits..." />
-          </TagsInput>
-        </FormControl>
-        <!-- <FormDescription> This is your public display name. </FormDescription> -->
-        <FormMessage />
-      </FormItem>
-    </FormField>
-
-    <!-- Content -->
-    <FormField v-slot="{ componentField }" name="excerpt">
-      <FormItem>
-        <FormLabel>Excerpt</FormLabel>
-        <FormControl>
-          <Textarea
-            v-bind="componentField"
-            placeholder="Brief summary"
-            rows="3"
-          />
-        </FormControl>
-        <!-- <FormDescription> This is your public display name. </FormDescription> -->
-        <FormMessage />
-      </FormItem>
-    </FormField>
-
-    <FormField v-slot="{ componentField }" name="content">
-      <FormItem>
-        <FormLabel>Content</FormLabel>
-        <FormControl>
-          <TextEditor v-bind="componentField" />
-        </FormControl>
-        <!-- <FormDescription> This is your public display name. </FormDescription> -->
-        <FormMessage />
-      </FormItem>
-    </FormField>
+    </FormField> -->
 
     <DialogFooter>
       <Button variant="outline" type="button" @click="$emit('cancel')"

@@ -44,6 +44,9 @@ export default defineNuxtConfig({
     image: "https://dashboard.oneclickafrica.com/og-image.jpg",
   },
   runtimeConfig: {
+    public: {
+      apiBase: process.env.NUXT_PUBLIC_API_BASE || "http://localhost:3000",
+    },
     apiBase: process.env.API_BASE,
     apiKey: process.env.API_KEY,
   },

@@ -45,12 +45,16 @@ export function usePostActions() {
     postToDelete.value = null;
   }
 
+  function handleClose() {
+    modalOpen.value = false;
+  }
+
   function toggleTrending(post: Post) {
     // Add function to update featured
     success(
-      post.trending ? "Removed from trending" : "Added to trending",
+      post.isTrending ? "Removed from trending" : "Added to trending",
       `"${post.title}" has been ${
-        post.trending ? "removed from" : "added to"
+        post.isTrending ? "removed from" : "added to"
       } trending.`,
     );
   }
@@ -67,5 +71,6 @@ export function usePostActions() {
     toggleTrending,
     handleView,
     handleEdit,
+    handleClose,
   };
 }
