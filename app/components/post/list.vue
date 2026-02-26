@@ -64,7 +64,7 @@ const getStatusColor = (status?: PostStatus) => {
               <NuxtImg
                 :src="item.image"
                 class="aspect-square"
-                placeholder="grey"
+                placeholder="/oca-placeholder.png"
               />
             </TableCell>
             <TableCell class="font-medium">

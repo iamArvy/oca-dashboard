@@ -2,7 +2,7 @@
 import { categories } from "@/lib/mockData";
 import type { Post } from "~/interfaces";
 
-type Mode = "edit" | "create" | "view";
+type Mode = "edit" | "create";
 const props = defineProps<{ post?: Post | null; mode: Mode }>();
 defineEmits<{
   (e: "save", data: Partial<Post>): void;

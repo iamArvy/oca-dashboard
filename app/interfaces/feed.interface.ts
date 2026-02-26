@@ -6,3 +6,5 @@ export interface Feed extends BaseItem {
   source: string;
   topic: Topic;
 }
+
+export type Feeds = Feed[];
